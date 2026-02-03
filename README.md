@@ -1,10 +1,14 @@
-# OpenVINO Circle Detection Demo
+# OpenCV Circle Detection
 
 *Simple Circle Quality Inspection using Webcam with OpenCV*
 
 ## 🎯 Overview
 
-This project detects printed circles on paper and classifies them as "GOOD" or "BAD" based on circularity, size, and completeness. It uses traditional computer vision (OpenCV) optimized for circle detection.
+This project detects printed circles on paper and classifies them as "GOOD" or "BAD" based on circularity, size, and completeness. It uses traditional computer vision (OpenCV) with contour-based analysis optimized for circle detection.
+
+## 🌐 Repository
+
+https://github.com/mea03kkw/opencv-circle-detection
 
 ## 📦 Requirements
 
@@ -29,32 +33,29 @@ pip install -r requirements.txt
 
 ### 2. Run Circle Detection
 ```bash
-python circle_inspector.py
+python circle_inspector_tuned.py
 ```
 
 ### 3. With Different Camera
 ```bash
-python circle_inspector.py --camera 1
+python circle_inspector_tuned.py --camera 1
 ```
 
 ### 4. With Configuration
 ```bash
-python circle_inspector.py --config config/config.yaml
+python circle_inspector_tuned.py --config config/config.yaml
 ```
 
 ## 📁 Project Structure
 
 ```
 .
-├── circle_inspector.py      # Main entry point
-├── opencv_detector.py       # OpenCV-based detection
-├── requirements.txt         # All dependencies
-├── README.md               # This file
+├── circle_inspector_tuned.py  # Main entry point (stable tuned version)
+├── requirements.txt           # All dependencies
+├── README.md                 # This file
 ├── config/
-│   └── config.yaml         # Configuration file
-├── docs/                   # Documentation
-├── output/                 # Saved detection results
-└── simple_circle.py       # Test circle creator
+│   └── config.yaml           # Configuration file
+└── test_images/              # Test images for circle detection
 ```
 
 ## 🎯 What Makes a Circle "BAD"
@@ -106,16 +107,10 @@ frame_height: 720              # Frame height in pixels
 
 ```bash
 # Test with different camera
-python circle_inspector.py --camera 1
+python circle_inspector_tuned.py --camera 1
 
-# Create test circle image
-python simple_circle.py
-
-# Print test circle and test detection
-# 1. Run: python simple_circle.py
-# 2. Print test_circle.png on paper
-# 3. Run: python circle_inspector.py
-# 4. Should see GREEN circle indicator
+# Test with configuration file
+python circle_inspector_tuned.py --config config/config.yaml
 ```
 
 ## 🎮 Controls
@@ -125,7 +120,6 @@ python simple_circle.py
 | `q` | Quit program |
 | `s` | Save current image |
 | `c` | Print circle details to console |
-| `a` | Auto-save GOOD circles |
 
 ## 🚀 Performance Tips
 
