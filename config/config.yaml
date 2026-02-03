@@ -1,0 +1,84 @@
+# OpenVINO Circle Detection Demo - Configuration File
+# Adjust these parameters to customize the detection behavior
+
+# =============================================================================
+# Camera Settings
+# =============================================================================
+camera_id: 0                    # Camera device ID (0 = default camera)
+frame_width: 1280              # Frame width in pixels
+frame_height: 720              # Frame height in pixels
+fps: 30                        # Target FPS (may vary based on hardware)
+
+# =============================================================================
+# Circle Detection Parameters
+# =============================================================================
+# Size constraints
+min_radius: 50                 # Minimum circle radius in pixels
+max_radius: 300                # Maximum circle radius in pixels
+
+# Quality thresholds
+circularity_threshold: 0.85    # Minimum circularity (0-1), higher = stricter
+contour_area_threshold: 0.8    # Minimum filled area ratio (0-1)
+
+# =============================================================================
+# Hough Circle Transform Parameters (for OpenCV method)
+# =============================================================================
+hough_min_dist: 100            # Minimum distance between circle centers
+hough_param1: 50               # Upper threshold for Canny edge detector
+hough_param2: 30               # Threshold for center detection (lower = more circles)
+
+# =============================================================================
+# OpenVINO Parameters (for AI method)
+# =============================================================================
+model_path: "models/circle_detection.xml"  # Path to OpenVINO model
+model_device: "CPU"            # Device: CPU, GPU, NPU, AUTO
+confidence_threshold: 0.25     # Minimum detection confidence (0-1) - lowered for testing
+iou_threshold: 0.5             # Intersection over Union threshold for NMS
+
+# =============================================================================
+# Image Processing Parameters
+# =============================================================================
+# CLAHE (Contrast Limited Adaptive Histogram Equalization)
+clahe_clip_limit: 2.0          # Clip limit for CLAHE
+clahe_tile_size: 8             # Tile grid size for CLAHE
+
+# Gaussian blur
+blur_kernel_size: 5            # Gaussian blur kernel size (must be odd)
+
+# =============================================================================
+# Output Settings
+# =============================================================================
+output_dir: "output"           # Directory for saved images
+auto_save_good: false          # Automatically save frames with all GOOD circles
+save_format: "png"             # Image format: png, jpg, jpeg
+
+# =============================================================================
+# Debug Settings
+# =============================================================================
+debug_mode: false              # Enable debug output
+show_processed: false          # Show processed images in separate window
+log_detections: false          # Log all detections to console
+
+# =============================================================================
+# Example Configurations for Different Scenarios
+# =============================================================================
+
+# For small circles (e.g., coins):
+# min_radius: 20
+# max_radius: 100
+# hough_param2: 20
+
+# For large circles (e.g., plates):
+# min_radius: 100
+# max_radius: 500
+# hough_min_dist: 200
+
+# For strict quality control:
+# circularity_threshold: 0.95
+# contour_area_threshold: 0.95
+# confidence_threshold: 0.8
+
+# For lenient detection:
+# circularity_threshold: 0.7
+# contour_area_threshold: 0.6
+# confidence_threshold: 0.3

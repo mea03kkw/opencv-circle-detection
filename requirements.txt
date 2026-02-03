@@ -1,0 +1,26 @@
+# OpenVINO Circle Detection Demo - Requirements
+# Install with: pip install -r requirements.txt
+
+# Core Computer Vision
+opencv-python>=4.8.0
+opencv-contrib-python>=4.8.0
+numpy>=1.24.0
+
+# Image Processing (Optional - requires C++ compiler)
+# scikit-image>=0.21.0  # Commented out - use pre-built wheel if needed
+Pillow>=10.0.0
+
+# OpenVINO
+openvino>=2023.3.0
+openvino-dev>=2023.3.0
+
+# Utilities
+pyyaml>=6.0
+tqdm>=4.66.0
+
+# Optional: For model conversion and optimization
+# onnx>=1.15.0
+# onnxruntime>=1.16.0
+
+# Optional: For advanced visualization
+matplotlib>=3.7.0
