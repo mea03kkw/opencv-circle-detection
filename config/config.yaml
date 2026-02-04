@@ -1,5 +1,5 @@
-# OpenVINO Circle Detection Demo - Configuration File
-# Adjust these parameters to customize the detection behavior
+# Circle Inspector (Stable Tuned) - Configuration File
+# Adjusted to match circle_inspector_tuned.py parameters
 
 # =============================================================================
 # Camera Settings
@@ -7,57 +7,50 @@
 camera_id: 0                    # Camera device ID (0 = default camera)
 frame_width: 1280              # Frame width in pixels
 frame_height: 720              # Frame height in pixels
-fps: 30                        # Target FPS (may vary based on hardware)
 
 # =============================================================================
 # Circle Detection Parameters
 # =============================================================================
 # Size constraints
-min_radius: 50                 # Minimum circle radius in pixels
-max_radius: 300                # Maximum circle radius in pixels
-
-# Quality thresholds
-circularity_threshold: 0.85    # Minimum circularity (0-1), higher = stricter
-contour_area_threshold: 0.8    # Minimum filled area ratio (0-1)
+min_radius: 28                 # Minimum circle radius in pixels (tolerant low end)
+max_radius: 110                # Maximum circle radius in pixels (tolerant high end)
 
 # =============================================================================
-# Hough Circle Transform Parameters (for OpenCV method)
+# Edge Detection & Morphology Parameters
 # =============================================================================
-hough_min_dist: 100            # Minimum distance between circle centers
-hough_param1: 50               # Upper threshold for Canny edge detector
-hough_param2: 30               # Threshold for center detection (lower = more circles)
+# Canny edge detection thresholds
+canny_low: 40                  # Lower threshold for Canny edge detector
+canny_high: 120                # Upper threshold for Canny edge detector
+
+# Morphology operations
+dilate_iter: 2                 # Dilation iterations (helps connect faint edges)
+erode_iter: 0                  # Erosion iterations
+close_iter: 1                  # Morphology close iterations (bridge micro-gaps)
 
 # =============================================================================
-# OpenVINO Parameters (for AI method)
+# Classification Thresholds
 # =============================================================================
-model_path: "models/circle_detection.xml"  # Path to OpenVINO model
-model_device: "CPU"            # Device: CPU, GPU, NPU, AUTO
-confidence_threshold: 0.25     # Minimum detection confidence (0-1) - lowered for testing
-iou_threshold: 0.5             # Intersection over Union threshold for NMS
+# Perimeter ratio (arcLength/(2πr))
+per_ratio_min_good: 0.72       # Minimum for GOOD circles (smooth/mostly-complete)
+per_ratio_bad: 0.50            # Below this = BAD (dashed/broken)
+
+# Axis ratio (major/minor ellipse axes)
+axis_ratio_max: 1.15           # Above this = BAD (ellipse reject)
+
+# Standard deviation normalized (std(distance_to_center)/r)
+std_norm_good: 0.08            # Below this = GOOD (smooth edge)
+std_norm_bad: 0.14             # Above this = BAD (jagged)
 
 # =============================================================================
-# Image Processing Parameters
+# Paper Gating Settings
 # =============================================================================
-# CLAHE (Contrast Limited Adaptive Histogram Equalization)
-clahe_clip_limit: 2.0          # Clip limit for CLAHE
-clahe_tile_size: 8             # Tile grid size for CLAHE
-
-# Gaussian blur
-blur_kernel_size: 5            # Gaussian blur kernel size (must be odd)
+paper_only: true               # Ignore dark/non-paper interiors (hands/phones)
+paper_v_min: 120               # HSV V brightness inside circle (lower = more tolerant)
 
 # =============================================================================
 # Output Settings
 # =============================================================================
 output_dir: "output"           # Directory for saved images
-auto_save_good: false          # Automatically save frames with all GOOD circles
-save_format: "png"             # Image format: png, jpg, jpeg
-
-# =============================================================================
-# Debug Settings
-# =============================================================================
-debug_mode: false              # Enable debug output
-show_processed: false          # Show processed images in separate window
-log_detections: false          # Log all detections to console
 
 # =============================================================================
 # Example Configurations for Different Scenarios
@@ -66,19 +59,21 @@ log_detections: false          # Log all detections to console
 # For small circles (e.g., coins):
 # min_radius: 20
 # max_radius: 100
-# hough_param2: 20
 
 # For large circles (e.g., plates):
 # min_radius: 100
 # max_radius: 500
-# hough_min_dist: 200
 
 # For strict quality control:
-# circularity_threshold: 0.95
-# contour_area_threshold: 0.95
-# confidence_threshold: 0.8
+# per_ratio_min_good: 0.85
+# per_ratio_bad: 0.60
+# axis_ratio_max: 1.10
+# std_norm_good: 0.05
+# std_norm_bad: 0.10
 
 # For lenient detection:
-# circularity_threshold: 0.7
-# contour_area_threshold: 0.6
-# confidence_threshold: 0.3
+# per_ratio_min_good: 0.65
+# per_ratio_bad: 0.40
+# axis_ratio_max: 1.25
+# std_norm_good: 0.12
+# std_norm_bad: 0.18
